@@ -1,0 +1,8 @@
+dist
+node_modules
+.vscode
+.vscode-test
+*.vsix
+.env
+.DS_Store
+._*

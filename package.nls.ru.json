@@ -1,0 +1,8 @@
+{
+  "description": "Hex-редактор файлов любого размера: замена, вставка и удаление байтов, отмена и сохранение средствами VS Code.",
+  "editor.displayName": "Bin Editor (Hex)",
+  "cmd.open": "Открыть в Bin Editor",
+  "cmd.openText": "Открыть в обычном редакторе",
+  "cmd.goto": "Перейти к смещению",
+  "cmd.toggleInsert": "Вставка / замена"
+}

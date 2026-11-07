@@ -1,0 +1,13 @@
+.vscode/**
+.gitignore
+**/jsconfig.json
+**/*.map
+**/eslint.config.mjs
+src/**
+test/**
+node_modules/**
+AGENTS.md
+CLAUDE.md
+**/.DS_Store
+**/._*
+scripts/**

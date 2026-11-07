@@ -1,0 +1,8 @@
+{
+  "description": "A hex editor for files of any size: overwrite, insert and delete bytes, undo and save in VS Code.",
+  "editor.displayName": "Bin Editor (Hex)",
+  "cmd.open": "Open in Bin Editor",
+  "cmd.openText": "Open in the Default Editor",
+  "cmd.goto": "Go to Offset",
+  "cmd.toggleInsert": "Toggle Insert / Overwrite"
+}

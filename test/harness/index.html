@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Bin Editor — test stand</title>
+<link href="/dist/css/editor.css" rel="stylesheet">
+<style>
+  :root { --vscode-editor-background: #1e1e1e; --vscode-editor-foreground: #d4d4d4; --vscode-editorLineNumber-foreground: #858585;
+    --vscode-editorCursor-foreground: #aeafad; --vscode-textLink-foreground: #3794ff; --vscode-descriptionForeground: #9d9d9d;
+    --vscode-editor-font-family: Menlo, monospace; --vscode-font-family: -apple-system, sans-serif; --vscode-font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="bin"></div>
+<script>
+// A fake extension host: a virtual file of SIZE bytes (byte i = (i * 7) & 0xff), edits logged.
+const SIZE = Number(new URLSearchParams(location.search).get('size') ?? 200 * 1024 * 1024);
+const FREE = Number(new URLSearchParams(location.search).get('free') ?? 1e12);
+const MTIME = 1700000000000;
+window.harness = { edits: [], sent: [] };
+const reply = msg => window.postMessage(msg, '*');
+window.acquireVsCodeApi = () => ({
+  postMessage(m) {
+    window.harness.sent.push(m.type);
+    if (m.type === 'ready') fetch('/strings.json').then(r => r.json()).then(strings => reply({ type: 'init', strings, locale: 'ru', restored: null }));
+    else if (m.type === 'bytes') {
+      const from = Math.min(SIZE, m.offset), n = Math.min(m.length, SIZE - from);
+      const data = new Uint8Array(n);
+      for (let i = 0; i < n; i++) data[i] = ((from + i) * 7) & 0xff;
+      setTimeout(() => reply({ type: 'hostReply', requestId: m.requestId, result: { data, size: SIZE, mtime: MTIME, ...(m.free ? { free: FREE } : {}) } }), 5);
+    } else if (m.type === 'edit') window.harness.edits.push(m.label);
+    else if (m.type === 'reply') window.harness.lastEdits = m.result;
+  },
+  getState() {}, setState() {},
+});
+</script>
+<script src="/dist/js/editor.js"></script>
+</body>
+</html>

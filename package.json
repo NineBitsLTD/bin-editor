@@ -1,0 +1,144 @@
+{
+  "name": "bin-editor",
+  "displayName": "Bin Editor",
+  "description": "%description%",
+  "version": "1.1.0",
+  "publisher": "ninebits",
+  "license": "MIT",
+  "icon": "resources/icon.png",
+  "type": "module",
+  "engines": {
+    "vscode": "^1.100.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "hex",
+    "binary",
+    "bytes"
+  ],
+  "main": "dist/extension.cjs",
+  "l10n": "./l10n",
+  "contributes": {
+    "customEditors": [
+      {
+        "viewType": "bin-editor.hex",
+        "displayName": "%editor.displayName%",
+        "selector": [
+          {
+            "filenamePattern": "*"
+          }
+        ],
+        "priority": "option"
+      }
+    ],
+    "configurationDefaults": {
+      "workbench.editor.defaultBinaryEditor": "bin-editor.hex"
+    },
+    "commands": [
+      {
+        "command": "bin-editor.open",
+        "title": "%cmd.open%",
+        "category": "Bin Editor",
+        "icon": "$(file-binary)"
+      },
+      {
+        "command": "bin-editor.openText",
+        "title": "%cmd.openText%",
+        "category": "Bin Editor",
+        "icon": "$(file-code)"
+      },
+      {
+        "command": "bin-editor.goto",
+        "title": "%cmd.goto%",
+        "category": "Bin Editor"
+      },
+      {
+        "command": "bin-editor.toggleInsert",
+        "title": "%cmd.toggleInsert%",
+        "category": "Bin Editor"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "bin-editor.goto",
+        "key": "ctrl+g",
+        "mac": "cmd+g",
+        "when": "activeCustomEditorId == 'bin-editor.hex'"
+      },
+      {
+        "command": "bin-editor.toggleInsert",
+        "key": "ctrl+i",
+        "mac": "cmd+i",
+        "when": "activeCustomEditorId == 'bin-editor.hex'"
+      },
+      {
+        "command": "bin-editor.toggleInsert",
+        "key": "insert",
+        "when": "activeCustomEditorId == 'bin-editor.hex'"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "bin-editor.open",
+          "when": "!explorerResourceIsFolder",
+          "group": "navigation@20"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "bin-editor.open",
+          "when": "resourceScheme == file && activeCustomEditorId != 'bin-editor.hex'",
+          "group": "navigation@90"
+        },
+        {
+          "command": "bin-editor.openText",
+          "when": "activeCustomEditorId == 'bin-editor.hex' && resource not in bin-editor.noDefaultEditor",
+          "group": "navigation@90"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "bin-editor.openText",
+          "when": "activeCustomEditorId == 'bin-editor.hex' && resource not in bin-editor.noDefaultEditor"
+        },
+        {
+          "command": "bin-editor.goto",
+          "when": "activeCustomEditorId == 'bin-editor.hex'"
+        },
+        {
+          "command": "bin-editor.toggleInsert",
+          "when": "activeCustomEditorId == 'bin-editor.hex'"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "pack": "vsce package --no-dependencies --allow-missing-repository",
+    "clean": "rm -rf dist",
+    "clean:css-temp": "rm -f src/scss/*.css*",
+    "compile:sass": "sass --no-source-map src/scss:src/scss",
+    "build:js": "esbuild src/extension.js --bundle --minify --outfile=dist/extension.cjs --external:vscode --platform=node --format=cjs",
+    "build:js-webview": "esbuild src/editor.js --bundle --minify --outdir=dist/js",
+    "build:css": "npm run compile:sass && esbuild src/scss/*.css --bundle --minify --outdir=dist/css --loader:.css=css && npm run clean:css-temp",
+    "build": "npm run clean && npm run build:js && npm run build:js-webview && npm run build:css",
+    "watch:js": "esbuild src/extension.js --bundle --outfile=dist/extension.cjs --external:vscode --platform=node --format=cjs --watch",
+    "watch:js-webview": "esbuild src/editor.js --bundle --outdir=dist/js --watch",
+    "watch:css": "sass --watch --no-source-map src/scss:dist/css",
+    "watch": "npm run build && concurrently 'npm:watch:*'",
+    "test": "node --test test/*.test.js"
+  },
+  "devDependencies": {
+    "@types/node": "22.x",
+    "@types/vscode": "^1.100.0",
+    "@vscode/vsce": "^4.0.0",
+    "concurrently": "^9.2.1",
+    "esbuild": "^0.27.1",
+    "eslint": "^9.39.1",
+    "globals": "^16.0.0",
+    "sass": "^1.96.0"
+  }
+}
