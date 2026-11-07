@@ -6,6 +6,14 @@
   "publisher": "ninebits",
   "license": "MIT",
   "icon": "resources/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NineBitsLTD/bin-editor.git"
+  },
+  "homepage": "https://github.com/NineBitsLTD/bin-editor#readme",
+  "bugs": {
+    "url": "https://github.com/NineBitsLTD/bin-editor/issues"
+  },
   "type": "module",
   "engines": {
     "vscode": "^1.100.0"
@@ -117,7 +125,7 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run build",
-    "pack": "vsce package --no-dependencies --allow-missing-repository",
+    "pack": "vsce package --no-dependencies",
     "clean": "rm -rf dist",
     "clean:css-temp": "rm -f src/scss/*.css*",
     "compile:sass": "sass --no-source-map src/scss:src/scss",
